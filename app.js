@@ -5,6 +5,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var Constants = require('./src/common/constants');
+var SC = require('node-soundcloud');
 
 jsx.install({extension: '.jsx'});
 
@@ -24,6 +26,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+SC.init({
+  id: Constants.SC.ID,
+  secret: Constants.SC.SECRET,
+  uri: "http://localhost:3000"
+});
+
+Constants.SC.REDIRECT_URL = SC.getConnectUrl();
 
 app.use('/', routes);
 app.use('/users', users);
